@@ -42,6 +42,15 @@ jobs:
         run: |
           az ml data create --file ${{ github.workspace }}/${{ inputs.data_file }} --resource-group ${{ inputs.resource_group }} \
           --workspace-name ${{ inputs.workspace_name }} --name ${{ inputs.name }}
+      - name: download-dataset-from-blob
+        if: ${{ inputs.file_type != ''}}
+        run: |
+          az storage blob download \
+            --account-name  strttmsdemo022dev \
+            --container-name data \
+            --name transactions_data.csv \
+            --file ${{ github.workspace }}/${{ inputs.data_file }} \
+            --auth-mode login          
       - name: create-dataset-as-job
         if: ${{ inputs.file_type != ''}}
         run: |
